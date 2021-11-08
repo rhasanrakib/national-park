@@ -8,23 +8,28 @@ function btnClose() {
     document.getElementById("wrapper").style.display="block"; 
 }
 // get meal list 
-
+let queryParams={
+    api_key:'j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw',
+}
+let baseUrl='https://developer.nps.gov/api/v1/'
 function getMealList() {
     let searchInputTxt = document.getElementById('search-input').value.trim();
-    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchInputTxt}`)
+    fetch(`${baseUrl}activities?${new URLSearchParams({
+        api_key:'j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw',
+        q:searchInputTxt
+    })}`)
         .then(response => response.json())
         .then(data => {
             let html = '';
-            if (data.meals) {
-                data.meals.forEach(meal => {
+            if (data.data.length>0) {
+                
+                data.data.forEach(elem => {
                     html += `
-                <div class="meal-item" id = "${meal.idMeal}">
-                        <div class="meal-img">
-                            <img src="${meal.strMealThumb}" alt="food">
-                        </div>
+                <div class="meal-item" id = "${elem.id}">
+                        
                         <div class="meal-name">
-                            <h3>${meal.strMeal}</h3>
-                            <a class="recipe-btn" src="#">Get recipe</a>
+                            <h3>${elem.name}</h3>
+                            <a class="recipe-btn" src="#">Enter</a>
                         </div>
                     </div>
                 `
@@ -46,9 +51,12 @@ function getMealRecipe(e) {
     e.preventDefault();
     if (e.target.classList.contains('recipe-btn')) {
         let mealItem = e.target.parentElement.parentElement;
-        fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealItem.id}`)
+        fetch(`${baseUrl}/activities/parks?${new URLSearchParams(...queryParams,...{id:mealItem.id})}`)
             .then(response => response.json())
-            .then(data => mealRecipeModal(data.meals));
+            .then(data => {
+                console.log(data.data)
+                mealRecipeModal(data.meals)
+            });
     }
 }
 
