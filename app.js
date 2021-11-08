@@ -14,14 +14,20 @@ let queryParams={
 let baseUrl='https://developer.nps.gov/api/v1/'
 function getMealList() {
     let searchInputTxt = document.getElementById('search-input').value.trim();
-    fetch(`${baseUrl}activities?${new URLSearchParams({
-        api_key:'j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw',
-        q:searchInputTxt
-    })}`)
+    if(searchInputTxt!=""){
+        queryParams={
+            ...queryParams,
+            ...{q:searchInputTxt}
+        }
+    }
+    console.log(queryParams)
+    fetch(`${baseUrl}activities?${new URLSearchParams(
+        queryParams
+    )}`)
         .then(response => response.json())
         .then(data => {
             let html = '';
-            if (data.data.length>0) {
+            if (data.data) {
                 
                 data.data.forEach(elem => {
                     html += `
@@ -51,6 +57,7 @@ function getMealRecipe(e) {
     e.preventDefault();
     if (e.target.classList.contains('recipe-btn')) {
         let mealItem = e.target.parentElement.parentElement;
+        console.log(`${baseUrl}/activities/parks?${new URLSearchParams(...queryParams,...{id:mealItem.id})}`)
         fetch(`${baseUrl}/activities/parks?${new URLSearchParams(...queryParams,...{id:mealItem.id})}`)
             .then(response => response.json())
             .then(data => {
