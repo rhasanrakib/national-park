@@ -52,51 +52,46 @@ function getMealList() {
 
 // get meal recipe
 function getMealRecipe(e) {
+    //console.log(e)
     document.getElementById("hide-show").style.display="block";
     document.getElementById("wrapper").style.display="none";
+    //console.log("here");
     e.preventDefault();
+    
     if (e.target.classList.contains('recipe-btn')) {
         let mealItem = e.target.parentElement.parentElement;
-        console.log(`${baseUrl}/activities/parks?${new URLSearchParams(...queryParams,...{id:mealItem.id})}`)
-        fetch(`${baseUrl}/activities/parks?${new URLSearchParams(...queryParams,...{id:mealItem.id})}`)
+        //console.log(`${baseUrl}activities/parks?${new URLSearchParams({...queryParams,...{id:mealItem.id}})}`)
+        fetch(`${baseUrl}activities/parks?${new URLSearchParams({...queryParams,...{id:mealItem.id}})}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data.data)
-                mealRecipeModal(data.meals)
+                //console.log(data.data)
+                mealRecipeModal(data.data)
             });
     }
 }
 
 // create meals 
-function mealRecipeModal(meal) {
-    meal = meal[0];
-    let ingredient = "";
+function mealRecipeModal(park) {
 
-    for (let i = 1; i <= 20; i++) {
-        let mealIngredient = meal["strIngredient" + i.toString()];
-        let mealMeasure = meal["strMeasure" + i.toString()];
-        if (mealIngredient === "") {
-            continue;
-        }
-        ingredient = ingredient + `
+ if(park){
+     park = park[0].parks;
+ }
+ let html='';
 
-
-        <p>
-        ${mealMeasure} ${mealIngredient}
-        </p>
+    for(let i of park){
+        html += `
+        
+        <a herf="#">
+        
+            <h2 class="recipe-title">${i.fullName}</h2>
+            <p class="recipe-category">${i.designation}
+            </p>
+        
+        </a>
+        
+        
         `;
-        document.getElementById("ingredients").innerHTML = ingredient;
-
+        
     }
-    let html = `
-    <h2 class="recipe-title">${meal.strMeal}</h2>
-    <p class="recipe-category">${meal.strCategory}
-    </p>
-    <div class="recipe-meal-img">
-        <img src="${meal.strMealThumb}" alt="">
-    </div>
-    
-    `;
     document.getElementById("showRecipes").innerHTML = html;
-
 }
