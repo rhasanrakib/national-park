@@ -110,8 +110,21 @@ const displayParksDetails = async(parks) => {
     const emailAddresses = parks.contacts.emailAddresses;
     const entranceFees = parks.entranceFees;
 
-    html+="directionsInfo: "+parks.directionsInfo;
-    html+='addresses: '+parks.addresses[0];
+    html+='<br>Entrance Fees<br>'
+    for(const i of entranceFees){
+        html+=`Cost: ${i.cost}<br> Description: ${i.description}<br> Title: ${i.title}<br>`;
+    }
+
+    html+="<br> Contacts: <br>";
+    for(const i of phone){
+        html+=`Phone: ${i.phoneNumber} type: ${i.type}<br>`;
+    }
+    for(const i of emailAddresses){
+        html+=`email: ${i.emailAddress}<br>`;
+    }
+    html+="<br>Directions Info: "+parks.directionsInfo;
+    html+='<br>addresses: '+parks.addresses[0];
+    html+=`<br>Web: <a href='${parks.url}'>${parks.fullName}</a>`
 
   const lyricsDiv = document.getElementById("song-lyrics");
   lyricsDiv.innerHTML = html;
