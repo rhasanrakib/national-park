@@ -125,6 +125,41 @@ const displayParksDetails = async(parks) => {
     html+="<br>Directions Info: "+parks.directionsInfo;
     html+='<br>addresses: '+parks.addresses[0];
     html+=`<br>Web: <a href='${parks.url}'>${parks.fullName}</a>`
+    html+='<br> Wecams:<br>'
+
+    let res;
+    const url = `${baseUrl}webcams?${new URLSearchParams({
+        api_key: "j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw",
+        parkCode: parks.parkCode,
+      })}`;
+      try {
+          
+        res = await fetch(url);
+        
+        data = await res.json();
+        
+        res=data.data;
+        
+        
+      } catch (error) {
+          console.log(error)
+        displayError("Sorry! I failed to load lyrics, Please try again later!!!");
+      }
+    if(res){
+        for(const j of res){
+            console.log(j.images)
+            if(j.images){
+               
+        
+                if(j.images.length>0){
+                    for(const i of j.images){
+                        console.log(i)
+                        html+=`<img src='${i.url}' alt='${i.altText}'> <br>`
+                     }
+                }
+            }
+        }
+    }
 
   const lyricsDiv = document.getElementById("song-lyrics");
   lyricsDiv.innerHTML = html;
