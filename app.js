@@ -1,20 +1,44 @@
-let baseUrl = "https://developer.nps.gov/api/v1/";
 
+let baseUrl = "https://developer.nps.gov/api/v1/";
+function render(list){
+  const serachSuggDom = document.getElementById('search-suggestion');
+  serachSuggDom.innerHTML=''
+  html=`<ul>`;
+  
+  for(i of list){
+    html+=`<li onclick=getLyric('${i.id}')> ${i.name} </li>`
+  }
+  html+='</ul>';
+  serachSuggDom.innerHTML=html;
+}
+
+function showSuggestion(data,searchText){
+  searchText=searchText.toLowerCase();
+  
+  data = data.filter(function(elem){
+    name = elem.name.toLowerCase();
+    if(name.indexOf(searchText) > -1){
+      console.log(elem);
+      return elem;
+    }
+  });
+  
+  render(data)
+}
 
 function keyPressSuggestion(){
+  
   const searchText = document.getElementById("search-field").value.trim();
-  const hideBg = document.querySelector("body");
-      hideBg.style.backgroundImage='none';
   queryParams = {
     api_key: "j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw",
-    ...(searchText != "" && { q: searchText }),
+    //...(searchText != "" && { q: searchText }),
   };
-  console.log(queryParams);
-  // load data
-  const url = `${baseUrl}activities?${new URLSearchParams(queryParams)}`;
+  const hideBg = document.querySelector("body");
+      hideBg.style.backgroundImage='none';
+      const url = `${baseUrl}activities?${new URLSearchParams(queryParams)}`;
   fetch(url)
     .then((res) => res.json())
-    .then((data) => displayActivity(data.data))
+    .then((data) => showSuggestion(data.data,searchText))
     .catch((error) =>
       displayError("Something Went Wrong!! Please try again later!")
     );
@@ -74,7 +98,7 @@ const getLyric = async (artist) => {
     const data = await res.json();
     displayParkDetails(data.data);
   } catch (error) {
-    displayError("Sorry! I failed to load lyrics, Please try again later!!!");
+    displayError("Sorry! I failed to load , Please try again later!!!");
   }
 };
 
