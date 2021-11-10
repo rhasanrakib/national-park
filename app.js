@@ -3,27 +3,44 @@ let baseUrl = "https://developer.nps.gov/api/v1/";
 function render(list){
   const serachSuggDom = document.getElementById('search-suggestion');
   serachSuggDom.innerHTML=''
-  html=`<ul>`;
   
+  if (list){
+    html=`<ul>`;
+  html+="<br>";
   for(i of list){
-    html+=`<li onclick=getLyric('${i.id}')> ${i.name} </li>`
+    name = i.name;
+    html+=`<li onclick="searchActivity('${name}')"> ${name} </li>`
   }
   html+='</ul>';
-  serachSuggDom.innerHTML=html;
+    serachSuggDom.innerHTML=html;
+    
+  }
+  else{
+    //console.log(Paisi)
+    serachSuggDom.innerHTML='';
+  }
+  
 }
 
 function showSuggestion(data,searchText){
   searchText=searchText.toLowerCase();
-  
   data = data.filter(function(elem){
     name = elem.name.toLowerCase();
+    //console.log("================",name,"=============")
     if(name.indexOf(searchText) > -1){
-      console.log(elem);
+      //console.log(elem);
       return elem;
     }
   });
   
-  render(data)
+  if(searchText===""){
+    render(null)    
+  }
+  else{
+    render(data)
+  }
+  //console.log(data)
+  
 }
 
 function keyPressSuggestion(){
@@ -40,12 +57,18 @@ function keyPressSuggestion(){
     .then((res) => res.json())
     .then((data) => showSuggestion(data.data,searchText))
     .catch((error) =>
-      displayError("Something Went Wrong!! Please try again later!")
+      console.log(error.message)
     );
 }
 
-const searchActivity = () => {
-  const searchText = document.getElementById("search-field").value.trim();
+const searchActivity = (searchText="") => {
+  searchText = searchText!=""?searchText:document.getElementById("search-field").value.trim();
+  document.getElementById("search-field").value=searchText;
+  const serachSuggDom = document.getElementById('search-suggestion');
+  serachSuggDom.innerHTML=''
+
+
+
   const hideBg = document.querySelector("body");
       hideBg.style.backgroundImage='none';
   queryParams = {
@@ -87,6 +110,7 @@ const displayActivity = (songs) => {
 };
 
 const getLyric = async (artist) => {
+  
   const hideBar = document.querySelector("#song-container");
   hideBar.style.display = "none";
   const url = `${baseUrl}activities/parks?${new URLSearchParams({
