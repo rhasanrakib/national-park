@@ -1,8 +1,10 @@
 let baseUrl = "https://developer.nps.gov/api/v1/";
 
-const searchSongs = () => {
-  const searchText = document.getElementById("search-field").value.trim();
 
+function keyPressSuggestion(){
+  const searchText = document.getElementById("search-field").value.trim();
+  const hideBg = document.querySelector("body");
+      hideBg.style.backgroundImage='none';
   queryParams = {
     api_key: "j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw",
     ...(searchText != "" && { q: searchText }),
@@ -12,13 +14,32 @@ const searchSongs = () => {
   const url = `${baseUrl}activities?${new URLSearchParams(queryParams)}`;
   fetch(url)
     .then((res) => res.json())
-    .then((data) => displaySongs(data.data))
+    .then((data) => displayActivity(data.data))
+    .catch((error) =>
+      displayError("Something Went Wrong!! Please try again later!")
+    );
+}
+
+const searchActivity = () => {
+  const searchText = document.getElementById("search-field").value.trim();
+  const hideBg = document.querySelector("body");
+      hideBg.style.backgroundImage='none';
+  queryParams = {
+    api_key: "j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw",
+    ...(searchText != "" && { q: searchText }),
+  };
+  console.log(queryParams);
+  // load data
+  const url = `${baseUrl}activities?${new URLSearchParams(queryParams)}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => displayActivity(data.data))
     .catch((error) =>
       displayError("Something Went Wrong!! Please try again later!")
     );
 };
 
-const displaySongs = (songs) => {
+const displayActivity = (songs) => {
   const songContainer = document.getElementById("song-container");
   songContainer.innerHTML = "";
 
@@ -32,8 +53,8 @@ const displaySongs = (songs) => {
             
            
         </div>
-        <div class="col-md-3 text-md-right text-center">
-            <button onclick="getLyric('${song.id}')" class="btn btn-success">Get Lyrics</button>
+        <div class="col-md-3 text-md-right text-right">
+            <button onclick="getLyric('${song.id}')" class="btn btn-success">more+</button>
         </div>
         `;
 
@@ -42,6 +63,8 @@ const displaySongs = (songs) => {
 };
 
 const getLyric = async (artist) => {
+  const hideBar = document.querySelector("#song-container");
+  hideBar.style.display = "none";
   const url = `${baseUrl}activities/parks?${new URLSearchParams({
     api_key: "j8lMm6FaFcghlNpqXfi3Fq6rbFX0TZt4YzBKxOZw",
     id: artist,
@@ -49,7 +72,7 @@ const getLyric = async (artist) => {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    displayLyrics(data.data);
+    displayParkDetails(data.data);
   } catch (error) {
     displayError("Sorry! I failed to load lyrics, Please try again later!!!");
   }
@@ -57,14 +80,14 @@ const getLyric = async (artist) => {
 
 
 
-const displayLyrics = async(lyrics) => {
+const displayParkDetails = async(lyrics) => {
     park = lyrics[0].parks
     //console.log(park)
     let html='';
     for (let i of park) {
         html += `
-        <a herf="#" onclick="getParkDetails('${i.parkCode}')">
-            <h2>${i.fullName}</h2>
+        <a class="park-details" herf="#" onclick="getParkDetails('${i.parkCode}')">
+            <h2 class="park-item park-header">${i.fullName}</h2>
         </a>
         `;
 
@@ -100,9 +123,9 @@ const displayParksDetails = async(parks) => {
     
         html += `
         
-            <h2>${parks.fullName}</h2>
+            <h2 class="park-item-name">${parks.fullName}</h2>
             <br>
-            <p>${parks.description}</p>
+            <div class="text-area-content"><p>${parks.description}</p></div>
         
         `;
 
@@ -110,9 +133,15 @@ const displayParksDetails = async(parks) => {
     const emailAddresses = parks.contacts.emailAddresses;
     const entranceFees = parks.entranceFees;
 
-    html+='<br>Entrance Fees<br>'
+    html+='<h3 style="margin-bottom: 30px">Entrance Fees</h3>'
     for(const i of entranceFees){
-        html+=`Cost: ${i.cost}<br> Description: ${i.description}<br> Title: ${i.title}<br>`;
+        html+=`
+        <div class="cost-area">
+          <p style="margin-bottom:10px; color: blue;">Cost: ${i.cost}</p>
+          <p> Description: ${i.description}</p>
+          <p> Title: ${i.title}</p>
+        </div>
+        `;
     }
 
     html+="<br> Contacts: <br>";
@@ -154,7 +183,7 @@ const displayParksDetails = async(parks) => {
                 if(j.images.length>0){
                     for(const i of j.images){
                         console.log(i)
-                        html+=`<img src='${i.url}' alt='${i.altText}'> <br>`
+                        html+=`<div class="img__area"><img class="gallery-img" src='${i.url}' alt='${i.altText}'></div>`
                      }
                 }
             }

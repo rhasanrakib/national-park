@@ -1,41 +1,104 @@
-body{
-    background-color: #13141b;
-    color: #ffffff;
-    background-image: url(images/bg-image.png);
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-position: top;
+body {
+  background-color: #13141b;
+  color: #ffffff;
+  background-image: url(images/bg-image.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: top;
 }
 
-.form-control{
-    background-color:rgba(255, 255, 255, 0.2);
-    padding: 22px;
-    border: none;
-    border-radius: 25px;
+.form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 22px;
+  border: none;
+  border-radius: 25px;
 }
-.btn{
-    border-radius: 1.5rem;
-    padding: 9px 20px;
+.btn {
+  border-radius: 1.5rem;
+  padding: 9px 20px;
 }
 
-.btn-privious{
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+.btn-privious {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 .navbar-toggler {
-    border: none;
+  border: none;
 }
-.search-box{
-    position: relative;
+.search-box {
+  position: relative;
 }
 .search-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
 }
-.single-result{
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
+.single-result {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
 }
 
+.park-details {
+  cursor: pointer;
+}
+.park-item {
+  font-size: 18px;
+  margin-top: 20px;
+  line-height: 35px;
+}
+.park-item:hover {
+  background-color: #f3b1b1;
+  color: #13141b;
+}
+.gallery-img {
+  width: 100%;
+}
+
+.park-header {
+  padding: 10px 40px;
+  border: 1px solid rgb(245, 241, 241);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.park-item-name {
+  border: 1px solid goldenrod;
+  line-height: 70px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+.text-area-content {
+  padding-top: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+.text-area-content p {
+  line-height: 2rem;
+  font-size: 20px;
+}
+.cost-area {
+  border: 1px solid goldenrod;
+  padding: 20px;
+}
+.cost-area p {
+  font-size: 18px;
+  width: 80%;
+  margin: auto;
+}
+.img__area {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-top: 30px;
+}
